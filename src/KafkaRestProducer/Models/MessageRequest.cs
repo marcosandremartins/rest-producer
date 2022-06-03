@@ -1,3 +1,5 @@
+using System.Text.Json.Nodes;
+
 namespace KafkaRestProducer.Models;
 
 public class MessageRequest
@@ -10,5 +12,5 @@ public class MessageRequest
 
     public object Payload { get; set; }
 
-    public object Headers { get; set; }
+    public List<KeyValuePair<string, string>> Headers { get; set; }
 }
