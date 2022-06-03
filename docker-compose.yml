@@ -1,0 +1,11 @@
+version: '3.4'
+
+services:
+  build:
+    image: rest-producer-build:${RELEASE_VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+      args:
+        RELEASE_VERSION: ${RELEASE_VERSION}
