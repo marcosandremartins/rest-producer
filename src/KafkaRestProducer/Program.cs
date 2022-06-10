@@ -16,7 +16,6 @@ builder.Services.AddSwaggerGen();
 var settings = builder.Configuration.GetSection("Settings").Get<Settings>();
 builder.Services.AddSingleton(settings);
 builder.Services.AddSingleton<MessageSerializer>();
-builder.Services.AddSingleton<ContractsManager>();
 
 var app = builder.Build();
 
