@@ -1,6 +1,7 @@
 namespace KafkaRestProducer.Helpers;
 
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using KafkaRestProducer.Configuration;
@@ -21,7 +22,7 @@ public class MessageSerializer
         this.settings = settings;
     }
 
-    public object? Serialize(
+    public object Serialize(
         SerializerType serializer,
         object payload,
         string contract)
@@ -35,9 +36,20 @@ public class MessageSerializer
 
         var type = this.GetTypeFromAssemblies(contract);
 
-        return type == null
-            ? null
-            : JsonSerializer.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(jsonString)), type);
+        if (type == null)
+        {
+            throw new InvalidDataException($"{contract} not found");
+        }
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
+        var result = JsonSerializer.Deserialize(stream, type);
+
+        if (result == null)
+        {
+            throw new SerializationException($"{contract} faild serialization");
+        }
+
+        return result;
     }
 
     private Type? GetTypeFromAssemblies(string contract)

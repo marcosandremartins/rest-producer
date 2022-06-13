@@ -1,6 +1,5 @@
 namespace KafkaRestProducer.Controllers;
 
-using System.Runtime.Serialization;
 using KafkaRestProducer.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using KafkaRestProducer.Models;
@@ -24,15 +23,20 @@ public class TopicsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] MessageRequest messageRequest)
     {
+        if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
+        {
+            this.ModelState.AddModelError(nameof(messageRequest.Contract), "Contract is required for selected serializer");
+        }
+
+        if (!this.ModelState.IsValid)
+        {
+            return BadRequest(this.ModelState);
+        }
+
         var message = this.messageSerializer.Serialize(
             messageRequest.Serializer,
             messageRequest.Payload,
             messageRequest.Contract);
-
-        if (message == null)
-        {
-            throw new SerializationException();
-        }
 
         await Producer.Produce(
             this.settings.KafkaBrokers,
@@ -44,6 +48,6 @@ public class TopicsController : ControllerBase
             messageRequest.Headers
         );
 
-        return Ok();
+        return Accepted();
     }
 }
