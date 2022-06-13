@@ -1,7 +1,9 @@
 namespace KafkaRestProducer.Helpers;
 
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Models;
 using Newtonsoft.Json.Linq;
 
@@ -12,11 +14,11 @@ public class MessageSerializer
         PropertyNameCaseInsensitive = true
     };
 
-    private readonly ContractsManager contractsManager;
+    private readonly Settings settings;
 
-    public MessageSerializer(ContractsManager contractsManager)
+    public MessageSerializer(Settings settings)
     {
-        this.contractsManager = contractsManager;
+        this.settings = settings;
     }
 
     public object? Serialize(
@@ -24,34 +26,27 @@ public class MessageSerializer
         object payload,
         string contract)
     {
-        return serializer switch
-        {
-            SerializerType.Json => this.JsonSerialize(payload),
-            SerializerType.Protobuf => this.ProtobufSerialize(payload, contract),
-            _ => throw new ArgumentOutOfRangeException(nameof(serializer), serializer, null)
-        };
-    }
-
-    private JObject JsonSerialize(object payload)
-    {
         var jsonString = JsonSerializer.Serialize(payload, this.jsonOptions);
 
-        return JObject.Parse(jsonString);
-    }
-
-    private object? ProtobufSerialize(object payload, string contract)
-    {
-        var type = this.contractsManager.GetTypeFromAssemblies(contract);
-
-        if (type == null)
+        if (serializer == SerializerType.Json)
         {
-            return null;
+            return JObject.Parse(jsonString);
         }
 
-        var jsonString = JsonSerializer.Serialize(payload, this.jsonOptions);
+        var type = this.GetTypeFromAssemblies(contract);
 
-        var result = JsonSerializer.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(jsonString)), type);
+        return type == null
+            ? null
+            : JsonSerializer.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(jsonString)), type);
+    }
 
-        return result;
+    private Type? GetTypeFromAssemblies(string contract)
+    {
+        var assemblies = Directory
+            .GetFiles(this.settings.ContractsFolder, "*.dll")
+            .Select(Assembly.LoadFile)
+            .ToList();
+
+        return assemblies.Select(assembly => assembly.GetType(contract)).FirstOrDefault(type => type != null);
     }
 }

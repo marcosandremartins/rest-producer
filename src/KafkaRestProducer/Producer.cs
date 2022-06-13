@@ -1,6 +1,8 @@
 namespace KafkaRestProducer;
 
 using System.Text;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
 using KafkaFlow.Producers;
 using KafkaFlow.Serializer;
@@ -10,6 +12,7 @@ public static class Producer
 {
     public static async Task Produce(
         IEnumerable<string> brokers,
+        string schemaRegistryUrl,
         string topic,
         SerializerType serializer,
         string messageKey,
@@ -24,6 +27,7 @@ public static class Producer
                 .AddCluster(
                     cluster => cluster
                         .WithBrokers(brokers)
+                        .WithSchemaRegistry(config => config.Url = schemaRegistryUrl)
                         .AddProducer(
                             nameof(KafkaRestProducer),
                             producer => producer
@@ -37,6 +41,14 @@ public static class Producer
                                             break;
                                         case SerializerType.Protobuf:
                                             m.AddSerializer<ProtobufNetSerializer>();
+                                            break;
+                                        case SerializerType.Avro:
+                                            m.AddSchemaRegistryAvroSerializer(
+                                                new AvroSerializerConfig
+                                                {
+                                                    AutoRegisterSchemas = true,
+                                                    SubjectNameStrategy = SubjectNameStrategy.TopicRecord
+                                                });
                                             break;
                                     }
                                 })

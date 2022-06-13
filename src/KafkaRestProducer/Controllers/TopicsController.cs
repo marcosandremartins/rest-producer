@@ -35,7 +35,8 @@ public class TopicsController : ControllerBase
         }
 
         await Producer.Produce(
-            this.settings.KafkaBroker,
+            this.settings.KafkaBrokers,
+            this.settings.SchemaRegistryUrl,
             messageRequest.Topic,
             messageRequest.Serializer,
             messageRequest.Key,
