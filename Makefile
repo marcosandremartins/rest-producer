@@ -1,4 +1,4 @@
-.PHONY: build clean
+.PHONY: build clean infra
 
 build:
 	@docker-compose build
