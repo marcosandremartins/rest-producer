@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
+using AutoFixture;
+using AutoFixture.Kernel;
 using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Models;
 using Newtonsoft.Json.Linq;
@@ -17,15 +19,19 @@ public class MessageSerializer
 
     private readonly Settings settings;
 
+    private readonly Fixture fixture;
+
     public MessageSerializer(Settings settings)
     {
         this.settings = settings;
+        this.fixture = new Fixture();
     }
 
     public object Serialize(
         SerializerType serializer,
+        string contract,
         object payload,
-        string contract)
+        bool autoGeneratePayload)
     {
         var jsonString = JsonSerializer.Serialize(payload, this.jsonOptions);
 
@@ -41,12 +47,17 @@ public class MessageSerializer
             throw new InvalidDataException($"{contract} not found");
         }
 
+        if (autoGeneratePayload)
+        {
+            return new SpecimenContext(this.fixture).Resolve(type);
+        }
+
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
         var result = JsonSerializer.Deserialize(stream, type);
 
         if (result == null)
         {
-            throw new SerializationException($"{contract} faild serialization");
+            throw new SerializationException($"{contract} failed serialization");
         }
 
         return result;

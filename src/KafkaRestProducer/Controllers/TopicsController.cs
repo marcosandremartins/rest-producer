@@ -21,7 +21,9 @@ public class TopicsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] MessageRequest messageRequest)
+    public async Task<IActionResult> PostAsync(
+        [FromBody] MessageRequest messageRequest,
+        [FromHeader] bool autoGeneratePayload = false)
     {
         if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
         {
@@ -35,8 +37,9 @@ public class TopicsController : ControllerBase
 
         var message = this.messageSerializer.Serialize(
             messageRequest.Serializer,
+            messageRequest.Contract,
             messageRequest.Payload,
-            messageRequest.Contract);
+            autoGeneratePayload);
 
         await Producer.Produce(
             this.settings.KafkaBrokers,

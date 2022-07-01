@@ -105,6 +105,21 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
               "Timestamp": "2022-06-01T12:00:00.001Z"
             }
          }'
+
+    # Produce a auto generated message serialized with Protobuf
+    $ curl -X 'POST' \
+      'http://localhost:5001/Topics' \
+      -H 'Content-Type: application/json' \
+      -H 'autoGeneratePayload: true' \
+      -d '{
+            "topic": "test-topic",
+            "key": "1",
+            "serializer": "Protobuf",
+            "contract": "application.message.protobuf.someUser",
+            "headers": {
+              "Timestamp": "2022-06-01T12:00:00.001Z"
+            }
+         }'
 ```
 
 ## Contributing

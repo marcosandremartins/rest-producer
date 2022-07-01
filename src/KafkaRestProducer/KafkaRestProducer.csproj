@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.17.0" />
         <PackageReference Include="KafkaFlow" Version="2.2.4" />
         <PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.2.4" />
         <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.2.4" />
