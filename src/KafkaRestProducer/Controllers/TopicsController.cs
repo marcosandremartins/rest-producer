@@ -21,9 +21,10 @@ public class TopicsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(202)]
     public async Task<IActionResult> PostAsync(
         [FromBody] MessageRequest messageRequest,
-        [FromHeader] bool autoGeneratePayload = false)
+        [FromHeader(Name = "Auto-Generate-Payload")] bool autoGeneratePayload = false)
     {
         if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
         {
