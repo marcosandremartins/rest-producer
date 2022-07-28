@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D29999A
 		..\Dockerfile = ..\Dockerfile
 		..\Makefile = ..\Makefile
 		..\docker-compose.yml = ..\docker-compose.yml
-		..\scripts\entrypoint.sh = ..\scripts\entrypoint.sh
 	EndProjectSection
 EndProject
 Global

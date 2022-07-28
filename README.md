@@ -22,8 +22,8 @@ services:
   rest-producer:
     image: marcosandremartins/rest-producer:latest
     environment:
-      KAFKA_BROKERS: kafka:9092
-      SCHEMA_REGISTRY_URL: schemaregistry:8085
+      Settings__KafkaBrokers__0: kafka:9092
+      Settings__SchemaRegistryUrl: schemaregistry:8081
     ports:
       - "5001:5001"
     volumes:
@@ -38,8 +38,8 @@ services:
   rest-producer-with-sdk:
     image: marcosandremartins/rest-producer-with-sdk:latest
     environment:
-      KAFKA_BROKERS: kafka:9092
-      SCHEMA_REGISTRY_URL: schemaregistry:8081
+      Settings__KafkaBrokers__0: kafka:9092
+      Settings__SchemaRegistryUrl: schemaregistry:8081
     ports:
       - "5001:5001"
     command: >
@@ -47,7 +47,7 @@ services:
                dotnet new console -n sample
                dotnet add sample/sample.csproj package Package.Name
                dotnet publish sample/sample.csproj -o /app/contracts/
-               ./entrypoint.sh"
+               dotnet KafkaRestProducer.dll"
 ```
 
 The following assumes you have Kafka, SchemaRegistry and an instance of the REST Producer running with the appropriate contracts assemblies loaded
@@ -110,7 +110,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
     $ curl -X 'POST' \
       'http://localhost:5001/Topics' \
       -H 'Content-Type: application/json' \
-      -H 'autoGeneratePayload: true' \
+      -H 'Auto-Generate-Payload: true' \
       -d '{
             "topic": "test-topic",
             "key": "1",

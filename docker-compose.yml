@@ -1,21 +1,21 @@
 version: '3.4'
 
 services:
-  release:
+  build:
     image: marcosandremartins/rest-producer:${RELEASE_VERSION}
     build:
       context: .
       dockerfile: Dockerfile
-      target: release
+      target: final
       args:
         RELEASE_VERSION: ${RELEASE_VERSION}
 
-  sdkrelease:
+  sdkbuild:
     image: marcosandremartins/rest-producer-with-sdk:${RELEASE_VERSION}
     build:
       context: .
       dockerfile: Dockerfile
-      target: sdkrelease
+      target: sdkfinal
       args:
         RELEASE_VERSION: ${RELEASE_VERSION}
 
