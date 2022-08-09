@@ -55,7 +55,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
 ```bash
     # Produce a JSON based message
     $ curl -X 'POST' \
-      'http://localhost:5001/Topics' \
+      'http://localhost:5001/topics' \
       -H 'Content-Type: application/json' \
       -d '{
             "topic": "test-topic",
@@ -72,7 +72,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
 
     # Produce a JSON based message serialized with Protobuf
     $ curl -X 'POST' \
-      'http://localhost:5001/Topics' \
+      'http://localhost:5001/topics' \
       -H 'Content-Type: application/json' \
       -d '{
             "topic": "test-topic",
@@ -90,7 +90,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
 
     # Produce a JSON based message serialized with Avro
     $ curl -X 'POST' \
-      'http://localhost:5001/Topics' \
+      'http://localhost:5001/topics' \
       -H 'Content-Type: application/json' \
       -d '{
             "topic": "test-topic",
@@ -108,7 +108,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
 
     # Produce a auto generated message serialized with Protobuf
     $ curl -X 'POST' \
-      'http://localhost:5001/Topics' \
+      'http://localhost:5001/topics' \
       -H 'Content-Type: application/json' \
       -H 'Auto-Generate-Payload: true' \
       -d '{
@@ -119,6 +119,20 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
             "headers": {
               "Timestamp": "2022-06-01T12:00:00.001Z"
             }
+         }'
+
+    # Produce multiple auto generated messages serialized with Protobuf
+    $ curl -X 'POST' \
+      'http://localhost:5001/topicsBulk' \
+      -H 'Content-Type: application/json' \
+      -d '{
+            "topic": "test-topic",
+            "serializer": "Protobuf",
+            "contract": "application.message.protobuf.someUser",
+            "headers": {
+                "Timestamp": "2022-06-01T12:00:00.001Z"
+            },
+            "numberMessages": 100
          }'
 ```
 

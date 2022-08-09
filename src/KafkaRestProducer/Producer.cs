@@ -19,6 +19,43 @@ public static class Producer
         object message,
         Dictionary<string, string> messageHeaders)
     {
+        await Produce(
+            brokers,
+            schemaRegistryUrl,
+            topic,
+            serializer,
+            messageKey,
+            new List<object>() { message },
+            messageHeaders);
+    }
+
+    public static async Task Produce(
+        IEnumerable<string> brokers,
+        string schemaRegistryUrl,
+        string topic,
+        SerializerType serializer,
+        List<object> messages,
+        Dictionary<string, string> messageHeaders)
+    {
+        await Produce(
+            brokers,
+            schemaRegistryUrl,
+            topic,
+            serializer,
+            string.Empty,
+            messages,
+            messageHeaders);
+    }
+
+    private static async Task Produce(
+        IEnumerable<string> brokers,
+        string schemaRegistryUrl,
+        string topic,
+        SerializerType serializer,
+        string messageKey,
+        List<object> messages,
+        Dictionary<string, string> messageHeaders)
+    {
         var services = new ServiceCollection();
 
         services.AddKafka(
@@ -72,10 +109,13 @@ public static class Producer
             headers.Add(header.Key, Encoding.UTF8.GetBytes(header.Value));
         }
 
-        await producers[nameof(KafkaRestProducer)].ProduceAsync(
-            messageKey,
-            message,
-            headers);
+        foreach (var message in messages)
+        {
+            await producers[nameof(KafkaRestProducer)].ProduceAsync(
+                messageKey,
+                message,
+                headers);
+        }
 
         await bus.StopAsync();
     }
