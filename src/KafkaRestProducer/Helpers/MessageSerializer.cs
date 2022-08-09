@@ -67,7 +67,7 @@ public class MessageSerializer
     {
         var assemblies = Directory
             .GetFiles(this.settings.ContractsFolder, "*.dll")
-            .Select(Assembly.LoadFile)
+            .Select(Assembly.LoadFrom)
             .ToList();
 
         return assemblies.Select(assembly => assembly.GetType(contract)).FirstOrDefault(type => type != null);
