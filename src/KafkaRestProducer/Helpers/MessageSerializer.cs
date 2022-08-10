@@ -75,10 +75,19 @@ public class MessageSerializer
 
     private Type? GetTypeFromAssemblies(string contract)
     {
-        var assemblies = Directory
-            .GetFiles(this.settings.ContractsFolder, "*.dll")
-            .Select(Assembly.LoadFrom)
-            .ToList();
+        var assemblies = new List<Assembly>();
+
+        foreach (var assemblyFile in Directory.GetFiles(this.settings.ContractsFolder, "*.dll"))
+        {
+            try
+            {
+                assemblies.Add(Assembly.LoadFrom(assemblyFile));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         return assemblies.Select(assembly => assembly.GetType(contract)).FirstOrDefault(type => type != null);
     }
