@@ -6,7 +6,6 @@ using KafkaRestProducer.Models;
 using KafkaRestProducer.Helpers;
 
 [ApiController]
-[Route("[controller]")]
 public class TopicsController : ControllerBase
 {
     private readonly MessageSerializer messageSerializer;
@@ -20,7 +19,7 @@ public class TopicsController : ControllerBase
         this.settings = settings;
     }
 
-    [HttpPost]
+    [HttpPost("topics")]
     [ProducesResponseType(202)]
     public async Task<IActionResult> PostAsync(
         [FromBody] MessageRequest messageRequest,
@@ -49,6 +48,37 @@ public class TopicsController : ControllerBase
             messageRequest.Serializer,
             messageRequest.Key,
             message,
+            messageRequest.Headers
+        );
+
+        return Accepted();
+    }
+
+    [HttpPost("topicsBulk")]
+    [ProducesResponseType(202)]
+    public async Task<IActionResult> PostBulkAsync([FromBody] MessageRequestBulk messageRequest)
+    {
+        if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
+        {
+            this.ModelState.AddModelError(nameof(messageRequest.Contract), "Contract is required for selected serializer");
+        }
+
+        if (!this.ModelState.IsValid)
+        {
+            return BadRequest(this.ModelState);
+        }
+
+        var messages = this.messageSerializer.Serialize(
+            messageRequest.Serializer,
+            messageRequest.Contract,
+            messageRequest.NumberMessages);
+
+        await Producer.Produce(
+            this.settings.KafkaBrokers,
+            this.settings.SchemaRegistryUrl,
+            messageRequest.Topic,
+            messageRequest.Serializer,
+            messages,
             messageRequest.Headers
         );
 

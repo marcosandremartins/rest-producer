@@ -30,7 +30,7 @@ public class MessageSerializer
     public object Serialize(
         SerializerType serializer,
         string contract,
-        object payload,
+        object? payload,
         bool autoGeneratePayload)
     {
         var jsonString = JsonSerializer.Serialize(payload, this.jsonOptions);
@@ -61,6 +61,16 @@ public class MessageSerializer
         }
 
         return result;
+    }
+
+    public List<object> Serialize(
+        SerializerType serializer,
+        string contract,
+        int numberMessages)
+    {
+        return Enumerable.Range(1, numberMessages)
+            .Select(x => Serialize(serializer, contract, null, true))
+            .ToList();
     }
 
     private Type? GetTypeFromAssemblies(string contract)

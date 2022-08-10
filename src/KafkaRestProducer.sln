@@ -1,14 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaRestProducer", "KafkaRestProducer\KafkaRestProducer.csproj", "{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaRestProducer", "KafkaRestProducer\KafkaRestProducer.csproj", "{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{198522E5-47C8-4AEB-AF19-B603A04E4316}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6D29999A-5A4F-4388-9791-BC61257721F7}"
 	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
 		..\Dockerfile = ..\Dockerfile
 		..\Makefile = ..\Makefile
-		..\docker-compose.yml = ..\docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{580657B0-32DA-4772-A0D7-7E413F8E7F1B}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global
@@ -22,7 +30,13 @@ Global
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C} = {198522E5-47C8-4AEB-AF19-B603A04E4316}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A99EC211-ABDA-4FD5-BC0B-A8BB2A229B27}
 	EndGlobalSection
 EndGlobal
