@@ -1,4 +1,4 @@
-namespace KafkaRestProducer;
+namespace KafkaRestProducer.Kafka;
 
 using System.Text;
 using Confluent.SchemaRegistry;
@@ -8,9 +8,9 @@ using KafkaFlow.Producers;
 using KafkaFlow.Serializer;
 using KafkaRestProducer.Models;
 
-public static class Producer
+public class Producer : IProducer
 {
-    public static async Task Produce(
+    public async Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
         string topic,
@@ -25,11 +25,11 @@ public static class Producer
             topic,
             serializer,
             messageKey,
-            new List<object>() { message },
+            new List<object>() {message},
             messageHeaders);
     }
 
-    public static async Task Produce(
+    public async Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
         string topic,

@@ -2,12 +2,12 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
 ARG RELEASE_VERSION
 
 WORKDIR /source
-COPY ["src/KafkaRestProducer.sln", "./"]
-COPY ["src/", "."]
+COPY ["KafkaRestProducer.sln", "."]
+COPY ["src/", "src/"]
 
 RUN dotnet restore KafkaRestProducer.sln -p:Version=${RELEASE_VERSION}
 RUN dotnet build KafkaRestProducer.sln --configuration Release --no-restore -p:Version=${RELEASE_VERSION}
-RUN dotnet publish KafkaRestProducer/KafkaRestProducer.csproj --configuration Release --runtime linux-x64 --no-build -p:Version=${RELEASE_VERSION} -o publish
+RUN dotnet publish src/KafkaRestProducer/KafkaRestProducer.csproj --configuration Release --runtime linux-x64 --no-build -p:Version=${RELEASE_VERSION} -o publish
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as sdkfinal
 ARG SERVICE_PORT=5001
