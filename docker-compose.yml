@@ -19,6 +19,15 @@ services:
       args:
         RELEASE_VERSION: ${RELEASE_VERSION}
 
+  tests:
+    image: marcosandremartins/rest-producer-tests:${RELEASE_VERSION}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: tests
+      args:
+        RELEASE_VERSION: ${RELEASE_VERSION}
+
   zookeeper:
     image: confluentinc/cp-zookeeper
     ports:

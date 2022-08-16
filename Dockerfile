@@ -9,6 +9,11 @@ RUN dotnet restore KafkaRestProducer.sln -p:Version=${RELEASE_VERSION}
 RUN dotnet build KafkaRestProducer.sln --configuration Release --no-restore -p:Version=${RELEASE_VERSION}
 RUN dotnet publish src/KafkaRestProducer/KafkaRestProducer.csproj --configuration Release --runtime linux-x64 --no-build -p:Version=${RELEASE_VERSION} -o publish
 
+FROM build AS tests
+CMD dotnet build KafkaRestProducer.sln --configuration Release --no-restore && \
+    dotnet test src/KafkaRestProducer.Tests/KafkaRestProducer.Tests.csproj --configuration Release --no-build && \
+    dotnet test src/KafkaRestProducer.IntegrationTests/KafkaRestProducer.IntegrationTests.csproj --configuration Release --no-build
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 as sdkfinal
 ARG SERVICE_PORT=5001
 ENV ASPNETCORE_URLS=http://+:${SERVICE_PORT}

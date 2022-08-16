@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaRestProducer", "src\Ka
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{198522E5-47C8-4AEB-AF19-B603A04E4316}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D0AD91F8-D24B-4BAC-B515-28108DB1AA26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaRestProducer.Tests", "src\KafkaRestProducer.Tests\KafkaRestProducer.Tests.csproj", "{D0758748-F392-4C96-87EA-C6AE720010A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaRestProducer.IntegrationTests", "src\KafkaRestProducer.IntegrationTests\KafkaRestProducer.IntegrationTests.csproj", "{005BEE09-E4EF-4D22-A462-5581D8663989}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +23,22 @@ Global
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0758748-F392-4C96-87EA-C6AE720010A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0758748-F392-4C96-87EA-C6AE720010A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0758748-F392-4C96-87EA-C6AE720010A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0758748-F392-4C96-87EA-C6AE720010A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{005BEE09-E4EF-4D22-A462-5581D8663989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{005BEE09-E4EF-4D22-A462-5581D8663989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{005BEE09-E4EF-4D22-A462-5581D8663989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{005BEE09-E4EF-4D22-A462-5581D8663989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1389CA9D-A8B6-4A13-8381-C2C38D438C8C} = {198522E5-47C8-4AEB-AF19-B603A04E4316}
+		{D0758748-F392-4C96-87EA-C6AE720010A9} = {D0AD91F8-D24B-4BAC-B515-28108DB1AA26}
+		{005BEE09-E4EF-4D22-A462-5581D8663989} = {D0AD91F8-D24B-4BAC-B515-28108DB1AA26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A99EC211-ABDA-4FD5-BC0B-A8BB2A229B27}
