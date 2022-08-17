@@ -1,47 +1,45 @@
 namespace KafkaRestProducer.Controllers;
 
 using KafkaRestProducer.Configuration;
-using Microsoft.AspNetCore.Mvc;
+using KafkaRestProducer.Kafka;
 using KafkaRestProducer.Models;
-using KafkaRestProducer.Helpers;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 public class TopicsController : ControllerBase
 {
-    private readonly MessageSerializer messageSerializer;
+    private readonly IMessageSerializer messageSerializer;
+    private readonly IProducer producer;
     private readonly Settings settings;
 
     public TopicsController(
-        MessageSerializer messageSerializer,
+        IMessageSerializer messageSerializer,
+        IProducer producer,
         Settings settings)
     {
         this.messageSerializer = messageSerializer;
+        this.producer = producer;
         this.settings = settings;
     }
 
     [HttpPost("topics")]
-    [ProducesResponseType(202)]
+    [ProducesResponseType(statusCode: 202)]
+    [ProducesResponseType(statusCode: 400, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(statusCode: 500, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> PostAsync(
         [FromBody] MessageRequest messageRequest,
-        [FromHeader(Name = "Auto-Generate-Payload")] bool autoGeneratePayload = false)
+        [FromHeader(Name = "Auto-Generate-Payload")]
+        bool autoGeneratePayload = false)
     {
-        if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
-        {
-            this.ModelState.AddModelError(nameof(messageRequest.Contract), "Contract is required for selected serializer");
-        }
-
-        if (!this.ModelState.IsValid)
-        {
-            return BadRequest(this.ModelState);
-        }
+        messageRequest.Validate(autoGeneratePayload);
 
         var message = this.messageSerializer.Serialize(
             messageRequest.Serializer,
             messageRequest.Contract,
-            messageRequest.Payload,
-            autoGeneratePayload);
+            autoGeneratePayload,
+            messageRequest.Payload);
 
-        await Producer.Produce(
+        await this.producer.Produce(
             this.settings.KafkaBrokers,
             this.settings.SchemaRegistryUrl,
             messageRequest.Topic,
@@ -55,25 +53,18 @@ public class TopicsController : ControllerBase
     }
 
     [HttpPost("topicsBulk")]
-    [ProducesResponseType(202)]
+    [ProducesResponseType(statusCode: 202)]
+    [ProducesResponseType(statusCode: 400, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(statusCode: 500, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> PostBulkAsync([FromBody] MessageRequestBulk messageRequest)
     {
-        if (messageRequest.Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(messageRequest.Contract))
-        {
-            this.ModelState.AddModelError(nameof(messageRequest.Contract), "Contract is required for selected serializer");
-        }
-
-        if (!this.ModelState.IsValid)
-        {
-            return BadRequest(this.ModelState);
-        }
+        messageRequest.Validate();
 
         var messages = this.messageSerializer.Serialize(
-            messageRequest.Serializer,
             messageRequest.Contract,
-            messageRequest.NumberMessages);
+            messageRequest.NumberOfMessages);
 
-        await Producer.Produce(
+        await this.producer.Produce(
             this.settings.KafkaBrokers,
             this.settings.SchemaRegistryUrl,
             messageRequest.Topic,
