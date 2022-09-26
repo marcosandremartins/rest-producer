@@ -31,22 +31,12 @@ public class MessageRequest
             ValidationMessages.Add($"Property '{nameof(Key)}' is Mandatory.");
         }
 
-        if (Serializer != SerializerType.Json && string.IsNullOrWhiteSpace(Contract))
+        if (string.IsNullOrWhiteSpace(Contract) && autoGeneratePayload)
         {
-            ValidationMessages.Add($"'{nameof(Contract)}' is required for selected serializer.");
+            ValidationMessages.Add($"'{nameof(Contract)}' is required when auto generate set to true.");
         }
 
-        if (Serializer == SerializerType.Json && autoGeneratePayload)
-        {
-            ValidationMessages.Add("Action not allowed for selected serializer.");
-        }
-
-        if (Serializer == SerializerType.Json && !autoGeneratePayload && Payload is null)
-        {
-            ValidationMessages.Add($"'{nameof(Payload)}' is required for selected serializer.");
-        }
-
-        if (Serializer != SerializerType.Json && !autoGeneratePayload && Payload is null)
+        if (!autoGeneratePayload && Payload is null)
         {
             ValidationMessages.Add($"Property '{nameof(Payload)}' is required.");
         }

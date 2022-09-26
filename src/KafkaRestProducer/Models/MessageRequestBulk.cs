@@ -26,11 +26,6 @@ public class MessageRequestBulk
             ValidationMessages.Add($"Property '{nameof(Contract)}' is Mandatory.");
         }
 
-        if (Serializer == SerializerType.Json)
-        {
-            ValidationMessages.Add("Action not allowed for selected serializer.");
-        }
-
         if (NumberOfMessages < 1)
         {
             ValidationMessages.Add($"'{nameof(NumberOfMessages)}' must be higher than 0.");

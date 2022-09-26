@@ -49,38 +49,6 @@ public class MessageRequestBulkTests
     }
 
     [Fact]
-    public void OnMessageRequestBulk_WithJsonSerializer_ShouldThrowArgumentException()
-    {
-        // Arrange
-        var messageRequest = this.fixture
-            .Build<MessageRequestBulk>()
-            .With(p => p.Serializer, SerializerType.Json)
-            .Create();
-
-        // Act
-        var result = () => messageRequest.Validate();
-
-        // Assert
-        result.Should().Throw<ArgumentException>().WithMessage("Action not allowed for selected serializer.");
-    }
-
-    [Fact]
-    public void OnMessageRequestBulk_WithoutJsonSerializer_ShouldNotThrowException()
-    {
-        // Arrange
-        var messageRequest = this.fixture
-            .Build<MessageRequestBulk>()
-            .With(p => p.Serializer, SerializerType.Avro)
-            .Create();
-
-        // Act
-        var result = () => messageRequest.Validate();
-
-        // Assert
-        result.Should().NotThrow();
-    }
-
-    [Fact]
     public void OnMessageRequestBulk_WithInvalidNumberOfMessages_ShouldThrowArgumentException()
     {
         // Arrange
@@ -95,5 +63,21 @@ public class MessageRequestBulkTests
 
         // Assert
         result.Should().Throw<ArgumentException>().WithMessage("'NumberOfMessages' must be higher than 0.");
+    }
+
+    [Fact]
+    public void OnMessageRequestBulk_NoErrors_ShouldNotThrowException()
+    {
+        // Arrange
+        var messageRequest = this.fixture
+            .Build<MessageRequestBulk>()
+            .With(p => p.Serializer, SerializerType.Avro)
+            .Create();
+
+        // Act
+        var result = () => messageRequest.Validate();
+
+        // Assert
+        result.Should().NotThrow();
     }
 }

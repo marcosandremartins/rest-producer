@@ -34,7 +34,7 @@ public class MessageSerializer : IMessageSerializer
     {
         var serializedPayload = JsonSerializer.Serialize(payload, this.jsonOptions);
 
-        if (serializer == SerializerType.Json)
+        if (serializer == SerializerType.Json && payload is not null)
         {
             return JObject.Parse(serializedPayload);
         }
