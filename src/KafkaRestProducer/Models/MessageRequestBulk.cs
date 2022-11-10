@@ -12,6 +12,8 @@ public class MessageRequestBulk
 
     public int NumberOfMessages { get; set; } = 0;
 
+    public Dictionary<string, object> PropertiesModifier { get; set; } = new();
+
     private List<string> ValidationMessages { get; set; } = new();
 
     public void Validate()

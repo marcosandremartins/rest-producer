@@ -34,10 +34,8 @@ public class TopicsController : ControllerBase
         messageRequest.Validate(autoGeneratePayload);
 
         var message = this.messageSerializer.Serialize(
-            messageRequest.Serializer,
-            messageRequest.Contract,
-            autoGeneratePayload,
-            messageRequest.Payload);
+            messageRequest,
+            autoGeneratePayload);
 
         await this.producer.Produce(
             this.settings.KafkaBrokers,
@@ -60,9 +58,7 @@ public class TopicsController : ControllerBase
     {
         messageRequest.Validate();
 
-        var messages = this.messageSerializer.Serialize(
-            messageRequest.Contract,
-            messageRequest.NumberOfMessages);
+        var messages = this.messageSerializer.BulkSerialize(messageRequest);
 
         await this.producer.Produce(
             this.settings.KafkaBrokers,

@@ -132,7 +132,10 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
             "headers": {
                 "Timestamp": "2022-06-01T12:00:00.001Z"
             },
-            "numberMessages": 100
+            "numberMessages": 100,
+            "propertiesModifier": {
+                "Name": "A-Real-Name"
+            }
          }'
 ```
 

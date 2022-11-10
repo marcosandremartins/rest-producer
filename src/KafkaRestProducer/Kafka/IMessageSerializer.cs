@@ -4,7 +4,7 @@ using KafkaRestProducer.Models;
 
 public interface IMessageSerializer
 {
-    object Serialize(SerializerType serializer, string contract, bool autoGeneratePayload, object? payload);
+    object Serialize(MessageRequest message, bool autoGeneratePayload);
 
-    public List<object> Serialize(string contract, int numberMessages);
+    public List<object> BulkSerialize(MessageRequestBulk message);
 }
