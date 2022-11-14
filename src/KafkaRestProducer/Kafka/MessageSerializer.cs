@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 public class MessageSerializer : IMessageSerializer
 {
-    private readonly JsonSerializerOptions? jsonOptions = new()
+    private readonly JsonSerializerOptions jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
@@ -23,44 +23,37 @@ public class MessageSerializer : IMessageSerializer
     public MessageSerializer(IAssemblyWrapper assemblyWrapper)
     {
         this.assemblyWrapper = assemblyWrapper;
-        this.fixture = new Fixture();
+        this.fixture = new Fixture {RepeatCount = 1};
     }
 
     public object Serialize(
-        SerializerType serializer,
-        string contract,
-        bool autoGeneratePayload,
-        object? payload)
+        MessageRequest message,
+        bool autoGeneratePayload)
     {
-        var serializedPayload = JsonSerializer.Serialize(payload, this.jsonOptions);
+        var serializedPayload = JsonSerializer.Serialize(message.Payload, this.jsonOptions);
 
-        if (serializer == SerializerType.Json && payload is not null)
+        if (message.Serializer == SerializerType.Json && message.Payload is not null)
         {
             return JObject.Parse(serializedPayload);
         }
 
-        var contractType = this.assemblyWrapper.GetType(contract);
+        var contractType = this.assemblyWrapper.GetType(message.Contract);
 
         return autoGeneratePayload
-            ? this.DoSerialize(contractType)
-            : this.DoSerialize(contractType, serializedPayload);
+            ? ToAnonymousSerialize(contractType)
+            : ToTypeSerialize(contractType, serializedPayload);
     }
 
-    public List<object> Serialize(
-        string contract,
-        int numberOfMessages)
+    public List<object> BulkSerialize(MessageRequestBulk message)
     {
-        var contractType = this.assemblyWrapper.GetType(contract);
+        var contractType = this.assemblyWrapper.GetType(message.Contract);
 
-        return Enumerable.Range(1, numberOfMessages)
-            .Select(x => this.DoSerialize(contractType))
+        return Enumerable.Range(1, message.NumberOfMessages)
+            .Select(_ => this.ToAnonymousSerialize(contractType, message.PropertiesModifier))
             .ToList();
     }
 
-    private object DoSerialize(Type contractType)
-        => new SpecimenContext(this.fixture).Resolve(contractType);
-
-    private object DoSerialize(
+    private static object ToTypeSerialize(
         Type contractType,
         string payload)
     {
@@ -74,5 +67,45 @@ public class MessageSerializer : IMessageSerializer
         }
 
         return result;
+    }
+
+    private object ToAnonymousSerialize(
+        Type contractType,
+        Dictionary<string, object>? modifiers = null)
+    {
+        var contract = new SpecimenContext(this.fixture).Resolve(contractType);
+
+        return modifiers == null ? contract : ApplyModifiers(contract, modifiers, contractType);
+    }
+
+    private static object ApplyModifiers(
+        object instance,
+        Dictionary<string, object> modifiers,
+        Type contractType)
+    {
+        var jsonString = JsonSerializer.Serialize(instance);
+
+        var jsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString) as JObject;
+
+        foreach (var modifier in modifiers)
+        {
+            var token = jsonObject?.SelectToken(modifier.Key);
+
+            var jsonValue = new JValue(modifier.Value.ToString());
+
+            if (int.TryParse(modifier.Value.ToString(), out var intValue))
+            {
+                jsonValue = new JValue(intValue);
+            }
+
+            if (bool.TryParse(modifier.Value.ToString(), out var boolValue))
+            {
+                jsonValue = new JValue(boolValue);
+            }
+
+            token?.Replace(new JValue(jsonValue));
+        }
+
+        return ToTypeSerialize(contractType, jsonObject!.ToString());
     }
 }
