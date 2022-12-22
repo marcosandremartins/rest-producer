@@ -6,6 +6,7 @@ using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
 using KafkaFlow.Producers;
 using KafkaFlow.Serializer;
+using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Models;
 
 public class Producer : IProducer
@@ -13,6 +14,7 @@ public class Producer : IProducer
     public async Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
+        SchemaRegistryAuth schemaRegistryAuth,
         string topic,
         SerializerType serializer,
         string messageKey,
@@ -22,6 +24,7 @@ public class Producer : IProducer
         await Produce(
             brokers,
             schemaRegistryUrl,
+            schemaRegistryAuth,
             topic,
             serializer,
             messageKey,
@@ -32,6 +35,7 @@ public class Producer : IProducer
     public async Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
+        SchemaRegistryAuth schemaRegistryAuth,
         string topic,
         SerializerType serializer,
         List<object> messages,
@@ -40,6 +44,7 @@ public class Producer : IProducer
         await Produce(
             brokers,
             schemaRegistryUrl,
+            schemaRegistryAuth,
             topic,
             serializer,
             string.Empty,
@@ -50,6 +55,7 @@ public class Producer : IProducer
     private static async Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
+        SchemaRegistryAuth schemaRegistryAuth,
         string topic,
         SerializerType serializer,
         string messageKey,
@@ -64,7 +70,16 @@ public class Producer : IProducer
                 .AddCluster(
                     cluster => cluster
                         .WithBrokers(brokers)
-                        .WithSchemaRegistry(config => config.Url = schemaRegistryUrl)
+                        .WithSchemaRegistry(config =>
+                        {
+                            config.Url = schemaRegistryUrl;
+
+                            if (schemaRegistryAuth.IsAuthenticated)
+                            {
+                                config.BasicAuthUserInfo =
+                                    $"{schemaRegistryAuth.Username}:{schemaRegistryAuth.Password}";
+                            }
+                        })
                         .AddProducer(
                             nameof(KafkaRestProducer),
                             producer => producer
