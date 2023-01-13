@@ -24,6 +24,10 @@ services:
     environment:
       Settings__KafkaBrokers__0: kafka:9092
       Settings__SchemaRegistryUrl: schemaregistry:8081
+      # the settings below are optional, they are only necessary 
+      # if your schema registry server is using basic authentication 
+      Settings__SchemaRegistryAuth__Username: username
+      Settings__SchemaRegistryAuth__Password: password
     ports:
       - "5001:5001"
     volumes:
@@ -40,6 +44,10 @@ services:
     environment:
       Settings__KafkaBrokers__0: kafka:9092
       Settings__SchemaRegistryUrl: schemaregistry:8081
+      # the settings below are optional, they are only necessary 
+      # if your schema registry server is using basic authentication 
+      Settings__SchemaRegistryAuth__Username: username
+      Settings__SchemaRegistryAuth__Password: password
     ports:
       - "5001:5001"
     command: >

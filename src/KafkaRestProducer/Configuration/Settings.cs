@@ -6,5 +6,7 @@ public sealed class Settings
 
     public string SchemaRegistryUrl { get; set; } = string.Empty;
 
+    public SchemaRegistryAuth SchemaRegistryAuth { get; set; }
+
     public string ContractsFolder { get; set; } = string.Empty;
 }

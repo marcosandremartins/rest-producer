@@ -40,6 +40,7 @@ public class TopicsController : ControllerBase
         await this.producer.Produce(
             this.settings.KafkaBrokers,
             this.settings.SchemaRegistryUrl,
+            this.settings.SchemaRegistryAuth,
             messageRequest.Topic,
             messageRequest.Serializer,
             messageRequest.Key,
@@ -63,6 +64,7 @@ public class TopicsController : ControllerBase
         await this.producer.Produce(
             this.settings.KafkaBrokers,
             this.settings.SchemaRegistryUrl,
+            this.settings.SchemaRegistryAuth,
             messageRequest.Topic,
             messageRequest.Serializer,
             messages,

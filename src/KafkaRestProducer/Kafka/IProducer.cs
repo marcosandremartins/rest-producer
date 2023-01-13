@@ -1,5 +1,6 @@
 namespace KafkaRestProducer.Kafka;
 
+using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Models;
 
 public interface IProducer
@@ -7,6 +8,7 @@ public interface IProducer
     public Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
+        SchemaRegistryAuth schemaRegistryAuth,
         string topic,
         SerializerType serializer,
         string messageKey,
@@ -16,6 +18,7 @@ public interface IProducer
     public Task Produce(
         IEnumerable<string> brokers,
         string schemaRegistryUrl,
+        SchemaRegistryAuth schemaRegistryAuth,
         string topic,
         SerializerType serializer,
         List<object> messages,
