@@ -1,5 +1,7 @@
 namespace KafkaRestProducer.Models;
 
+using Confluent.Kafka;
+
 public class MessageRequestBulk
 {
     public string Topic { get; set; } = string.Empty;
@@ -7,6 +9,8 @@ public class MessageRequestBulk
     public SerializerType Serializer { get; set; }
 
     public string Contract { get; set; } = string.Empty;
+
+    public CompressionType CompressionType { get; set; } = CompressionType.None;
 
     public Dictionary<string, string> Headers { get; set; } = new();
 

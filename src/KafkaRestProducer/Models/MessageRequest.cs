@@ -1,3 +1,5 @@
+using Confluent.Kafka;
+
 namespace KafkaRestProducer.Models;
 
 using System.Text.Json;
@@ -14,6 +16,8 @@ public class MessageRequest
     public string Contract { get; set; } = string.Empty;
 
     public object? Payload { get; set; }
+
+    public CompressionType CompressionType { get; set; } = CompressionType.None;
 
     public Dictionary<string, string> Headers { get; set; } = new();
 

@@ -1,6 +1,7 @@
 namespace KafkaRestProducer.Kafka;
 
 using System.Text;
+using Confluent.Kafka;
 using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
@@ -19,6 +20,7 @@ public class Producer : IProducer
         SerializerType serializer,
         string messageKey,
         object message,
+        CompressionType compressionType,
         Dictionary<string, string> messageHeaders)
     {
         await Produce(
@@ -29,6 +31,7 @@ public class Producer : IProducer
             serializer,
             messageKey,
             new List<object>() {message},
+            compressionType,
             messageHeaders);
     }
 
@@ -39,6 +42,7 @@ public class Producer : IProducer
         string topic,
         SerializerType serializer,
         List<object> messages,
+        CompressionType compressionType,
         Dictionary<string, string> messageHeaders)
     {
         await Produce(
@@ -49,6 +53,7 @@ public class Producer : IProducer
             serializer,
             string.Empty,
             messages,
+            compressionType,
             messageHeaders);
     }
 
@@ -60,6 +65,7 @@ public class Producer : IProducer
         SerializerType serializer,
         string messageKey,
         List<object> messages,
+        CompressionType compressionType,
         Dictionary<string, string> messageHeaders)
     {
         var services = new ServiceCollection();
@@ -84,6 +90,7 @@ public class Producer : IProducer
                             nameof(KafkaRestProducer),
                             producer => producer
                                 .DefaultTopic(topic)
+                                .WithCompression(compressionType)
                                 .AddMiddlewares(m =>
                                 {
                                     switch (serializer)
@@ -104,7 +111,7 @@ public class Producer : IProducer
                                             break;
                                     }
                                 })
-                                .WithAcks(Acks.All)
+                                .WithAcks(KafkaFlow.Acks.All)
                         )
                 )
         );
@@ -129,7 +136,8 @@ public class Producer : IProducer
             await producers[nameof(KafkaRestProducer)].ProduceAsync(
                 messageKey,
                 message,
-                headers);
+                headers,
+                null);
         }
 
         await bus.StopAsync();
