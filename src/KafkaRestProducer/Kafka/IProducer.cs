@@ -1,5 +1,6 @@
 namespace KafkaRestProducer.Kafka;
 
+using Confluent.Kafka;
 using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Models;
 
@@ -13,6 +14,7 @@ public interface IProducer
         SerializerType serializer,
         string messageKey,
         object message,
+        CompressionType compressionType,
         Dictionary<string, string> messageHeaders);
 
     public Task Produce(
@@ -22,5 +24,6 @@ public interface IProducer
         string topic,
         SerializerType serializer,
         List<object> messages,
+        CompressionType compressionType,
         Dictionary<string, string> messageHeaders);
 }

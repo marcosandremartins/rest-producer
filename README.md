@@ -61,7 +61,7 @@ services:
 The following assumes you have Kafka, SchemaRegistry and an instance of the REST Producer running with the appropriate contracts assemblies loaded
 
 ```bash
-    # Produce a JSON based message
+    # Produce a JSON based message Compressed with Gzip
     $ curl -X 'POST' \
       'http://localhost:5001/topics' \
       -H 'Content-Type: application/json' \
@@ -69,6 +69,7 @@ The following assumes you have Kafka, SchemaRegistry and an instance of the REST
             "topic": "test-topic",
             "key": "1",
             "serializer": "Json",
+            "compressionType": "Gzip",
             "payload": {
               "Name": "some guy",
               "Id": 1

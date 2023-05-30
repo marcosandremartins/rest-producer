@@ -45,6 +45,7 @@ public class TopicsController : ControllerBase
             messageRequest.Serializer,
             messageRequest.Key,
             message,
+            messageRequest.CompressionType,
             messageRequest.Headers
         );
 
@@ -68,6 +69,7 @@ public class TopicsController : ControllerBase
             messageRequest.Topic,
             messageRequest.Serializer,
             messages,
+            messageRequest.CompressionType,
             messageRequest.Headers
         );
 
