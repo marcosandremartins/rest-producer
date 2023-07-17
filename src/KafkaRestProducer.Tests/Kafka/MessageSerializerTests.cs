@@ -58,7 +58,8 @@ public class MessageSerializerTests
             Payload = new
             {
                 Id = 1,
-                Name = "SomeOne"
+                Name = "SomeOne",
+                Addresses = new List<string> { "street1", "street2" }
             }
         };
 
@@ -76,6 +77,17 @@ public class MessageSerializerTests
         this.assemblyWrapperMock.Verify();
         result.Should().NotBeNull();
         result.Should().BeOfType<FakeContract>();
+
+        var fakeContract = new FakeContract
+        {
+            Id = 1,
+            Name = "SomeOne",
+        };
+
+        fakeContract.AddAddress("street1");
+        fakeContract.AddAddress("street2");
+
+        ((FakeContract)result).Should().BeEquivalentTo(fakeContract);
     }
 
     [Fact]
@@ -195,7 +207,16 @@ public class MessageSerializerTests
 
 public class FakeContract
 {
+    private readonly List<string> addresses;
+
     public int Id { get; set; } = 1;
 
     public string Name { get; set; } = string.Empty;
+
+    public List<string> Addresses { get; } = new List<string>();
+
+    public void AddAddress(string address)
+    {
+        this.Addresses.Add(address);
+    }
 }

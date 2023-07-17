@@ -1,7 +1,6 @@
 namespace KafkaRestProducer.Kafka;
 
 using System.Runtime.Serialization;
-using System.Text;
 using System.Text.Json;
 using AutoFixture;
 using AutoFixture.Kernel;
@@ -57,9 +56,7 @@ public class MessageSerializer : IMessageSerializer
         Type contractType,
         string payload)
     {
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(payload));
-
-        var result = JsonSerializer.Deserialize(stream, contractType);
+        var result = Newtonsoft.Json.JsonConvert.DeserializeObject(payload, contractType);
 
         if (result == null)
         {
