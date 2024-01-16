@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 ARG RELEASE_VERSION
 
 WORKDIR /source
@@ -14,7 +14,7 @@ CMD dotnet build KafkaRestProducer.sln --configuration Release --no-restore && \
     dotnet test src/KafkaRestProducer.Tests/KafkaRestProducer.Tests.csproj --configuration Release --no-build && \
     dotnet test src/KafkaRestProducer.IntegrationTests/KafkaRestProducer.IntegrationTests.csproj --configuration Release --no-build
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as sdkfinal
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as sdkfinal
 ARG SERVICE_PORT=5001
 ENV ASPNETCORE_URLS=http://+:${SERVICE_PORT}
 EXPOSE ${SERVICE_PORT}
@@ -23,13 +23,13 @@ WORKDIR /
 RUN wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb
 RUN rm packages-microsoft-prod.deb
-RUN apt update && apt install -y dotnet-runtime-3.1
+RUN apt update && apt install -y dotnet-runtime-8.0
 
 WORKDIR /app
 RUN mkdir contracts
 COPY --from=build /source/publish .
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0 as final
+FROM mcr.microsoft.com/dotnet/runtime:8.0 as final
 ARG SERVICE_PORT=5001
 ENV ASPNETCORE_URLS=http://+:${SERVICE_PORT}
 EXPOSE ${SERVICE_PORT}
