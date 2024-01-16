@@ -3,6 +3,8 @@ using Hellang.Middleware.ProblemDetails;
 using KafkaRestProducer.Configuration;
 using KafkaRestProducer.Kafka;
 using KafkaRestProducer.Wrappers;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
