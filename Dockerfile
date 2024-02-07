@@ -29,7 +29,7 @@ WORKDIR /app
 RUN mkdir contracts
 COPY --from=build /source/publish .
 
-FROM mcr.microsoft.com/dotnet/runtime:8.0 as final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
 ARG SERVICE_PORT=5001
 ENV ASPNETCORE_URLS=http://+:${SERVICE_PORT}
 EXPOSE ${SERVICE_PORT}
