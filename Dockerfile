@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 ARG RELEASE_VERSION
+ENV RELEASE_VERSION=${RELEASE_VERSION}
 
 WORKDIR /source
 COPY ["KafkaRestProducer.sln", "."]
