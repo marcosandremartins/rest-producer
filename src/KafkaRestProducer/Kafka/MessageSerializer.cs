@@ -56,7 +56,9 @@ public class MessageSerializer : IMessageSerializer
         Type contractType,
         string payload)
     {
-        var result = Newtonsoft.Json.JsonConvert.DeserializeObject(payload, contractType);
+        //var result = Newtonsoft.Json.JsonConvert.DeserializeObject(payload, contractType);
+
+        var result = System.Text.Json.JsonSerializer.Deserialize(payload, contractType);
 
         if (result == null)
         {
