@@ -4,9 +4,6 @@ on:
   release:
     types: [ published ]
 
-env:
-  RELEASE_VERSION: ${{ github.event.release.tag_name }}
-
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -37,6 +34,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: RELEASE_VERSION:=${{ github.event.release.tag_name }}
 
       - name: Print Version
         run: echo ${{ github.event.release.tag_name }}
