@@ -16,7 +16,8 @@ public class FakeProducer : IProducer
         string messageKey,
         object message,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders)
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor)
         => Task.CompletedTask;
 
     public Task Produce(
@@ -26,6 +27,7 @@ public class FakeProducer : IProducer
         string topic, SerializerType serializer,
         List<object> messages,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders)
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor)
         => Task.CompletedTask;
 }

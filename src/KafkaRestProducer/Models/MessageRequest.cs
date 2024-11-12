@@ -21,6 +21,8 @@ public class MessageRequest
 
     public Dictionary<string, string> Headers { get; set; } = new();
 
+    public bool AddGzipMessageCompressor { get; set; }
+
     private List<string> ValidationMessages { get; set; } = new();
 
     public void Validate(bool autoGeneratePayload)

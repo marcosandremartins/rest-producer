@@ -18,6 +18,8 @@ public class MessageRequestBulk
 
     public Dictionary<string, object> PropertiesModifier { get; set; } = new();
 
+    public bool AddGzipMessageCompressor { get; set; }
+
     private List<string> ValidationMessages { get; set; } = new();
 
     public void Validate()

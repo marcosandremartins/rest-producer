@@ -15,7 +15,8 @@ public interface IProducer
         string messageKey,
         object message,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders);
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor);
 
     public Task Produce(
         IEnumerable<string> brokers,
@@ -25,5 +26,6 @@ public interface IProducer
         SerializerType serializer,
         List<object> messages,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders);
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor);
 }
