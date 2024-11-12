@@ -46,7 +46,8 @@ public class TopicsController : ControllerBase
             messageRequest.Key,
             message,
             messageRequest.CompressionType,
-            messageRequest.Headers
+            messageRequest.Headers,
+            messageRequest.AddGzipMessageCompressor
         );
 
         return Accepted();
@@ -70,7 +71,8 @@ public class TopicsController : ControllerBase
             messageRequest.Serializer,
             messages,
             messageRequest.CompressionType,
-            messageRequest.Headers
+            messageRequest.Headers,
+            messageRequest.AddGzipMessageCompressor
         );
 
         return Accepted();

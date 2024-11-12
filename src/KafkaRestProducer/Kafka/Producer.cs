@@ -5,6 +5,7 @@ using Confluent.Kafka;
 using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
+using KafkaFlow.Compressor.Gzip;
 using KafkaFlow.Producers;
 using KafkaFlow.Serializer;
 using KafkaRestProducer.Configuration;
@@ -21,7 +22,8 @@ public class Producer : IProducer
         string messageKey,
         object message,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders)
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor)
     {
         await Produce(
             brokers,
@@ -32,7 +34,8 @@ public class Producer : IProducer
             messageKey,
             new List<object>() {message},
             compressionType,
-            messageHeaders);
+            messageHeaders,
+            addGzipMessageCompressor);
     }
 
     public async Task Produce(
@@ -43,7 +46,8 @@ public class Producer : IProducer
         SerializerType serializer,
         List<object> messages,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders)
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor)
     {
         await Produce(
             brokers,
@@ -54,7 +58,8 @@ public class Producer : IProducer
             string.Empty,
             messages,
             compressionType,
-            messageHeaders);
+            messageHeaders,
+            addGzipMessageCompressor);
     }
 
     private static async Task Produce(
@@ -66,7 +71,8 @@ public class Producer : IProducer
         string messageKey,
         List<object> messages,
         CompressionType compressionType,
-        Dictionary<string, string> messageHeaders)
+        Dictionary<string, string> messageHeaders,
+        bool addGzipMessageCompressor)
     {
         var services = new ServiceCollection();
 
@@ -109,6 +115,11 @@ public class Producer : IProducer
                                                     SubjectNameStrategy = SubjectNameStrategy.TopicRecord
                                                 });
                                             break;
+                                    }
+
+                                    if (addGzipMessageCompressor)
+                                    {
+                                        m.AddCompressor<GzipMessageCompressor>();
                                     }
                                 })
                                 .WithAcks(KafkaFlow.Acks.All)

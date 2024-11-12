@@ -11,6 +11,7 @@
         <PackageReference Include="AutoFixture" Version="4.18.1" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
         <PackageReference Include="KafkaFlow" Version="3.0.3" />
+        <PackageReference Include="KafkaFlow.Compressor.Gzip" Version="3.0.3" />
         <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.3" />
         <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.3" />
         <PackageReference Include="KafkaFlow.Serializer.NewtonsoftJson" Version="3.0.3" />
