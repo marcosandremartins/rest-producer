@@ -10,4 +10,4 @@ clean:
 	@docker-compose down -v
 
 infra:
-	@docker-compose up -d zookeeper kafka schemaregistry
+	@docker-compose up -d kafka schema-registry kafka-ui

@@ -30,7 +30,46 @@ public class TopicsTests : BaseTestServer
 
         var request = new HttpRequestMessage
         {
-            RequestUri = new Uri("/topics"),
+            RequestUri = new Uri("/topics", UriKind.Relative),
+            Method = HttpMethod.Post,
+            Content = contentRequest
+        };
+
+        // Act
+        var response = await this.TestHttpClient.SendAsync(request);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+    }
+
+    [Fact]
+    public async Task PostTopics_ValidRequest_ReturnsAccepted2()
+    {
+        // Arrange
+        var messageRequest = new
+        {
+            Topic = "topic",
+            Key = "key",
+            Serializer = SerializerType.Avro,
+            Payload = new
+            {
+                Name = "itemtest",
+                Price = "0.0"
+            },
+            Contract = "KafkaRestProducer.IntegrationTests.Contracts.ItemContract"
+        };
+
+        var contentRequest = new StringContent(
+            JsonConvert.SerializeObject(messageRequest),
+            Encoding.UTF8,
+            "application/json");
+
+        var uri = new Uri("/topics", UriKind.Relative);
+
+        var request = new HttpRequestMessage
+        {
+            RequestUri = uri,
             Method = HttpMethod.Post,
             Content = contentRequest
         };
@@ -62,7 +101,7 @@ public class TopicsTests : BaseTestServer
 
         var request = new HttpRequestMessage
         {
-            RequestUri = new Uri("/topics"),
+            RequestUri = new Uri("/topics", UriKind.Relative),
             Method = HttpMethod.Post,
             Content = contentRequest
         };

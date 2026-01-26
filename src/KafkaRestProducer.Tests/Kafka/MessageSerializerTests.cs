@@ -1,5 +1,7 @@
 namespace KafkaRestProducer.Tests.Kafka;
 
+using Avro;
+using Avro.Specific;
 using FluentAssertions;
 using KafkaRestProducer.Kafka;
 using KafkaRestProducer.Models;
@@ -223,3 +225,5 @@ public class FakeContract
         this.Addresses.Add(address);
     }
 }
+
+

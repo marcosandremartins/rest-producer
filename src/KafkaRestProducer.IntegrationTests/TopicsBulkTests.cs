@@ -30,7 +30,7 @@ public class TopicsBulkTests : BaseTestServer
 
         var request = new HttpRequestMessage
         {
-            RequestUri = new Uri("/topicsBulk"),
+            RequestUri = new Uri("/topicsBulk", UriKind.Relative),
             Method = HttpMethod.Post,
             Content = contentRequest
         };
