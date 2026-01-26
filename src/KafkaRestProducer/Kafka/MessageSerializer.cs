@@ -12,7 +12,7 @@ public class MessageSerializer : IMessageSerializer
 {
     private readonly JsonSerializerOptions jsonOptions = new()
     {
-        PropertyNameCaseInsensitive = true
+        PropertyNameCaseInsensitive = true,
     };
 
     private readonly IAssemblyWrapper assemblyWrapper;
@@ -29,7 +29,7 @@ public class MessageSerializer : IMessageSerializer
         MessageRequest message,
         bool autoGeneratePayload)
     {
-        var serializedPayload = JsonSerializer.Serialize(message.Payload, this.jsonOptions);
+        var serializedPayload = System.Text.Json.JsonSerializer.Serialize(message.Payload, this.jsonOptions);
 
         if (message.Serializer == SerializerType.Json && message.Payload is not null)
         {
@@ -80,7 +80,7 @@ public class MessageSerializer : IMessageSerializer
         Dictionary<string, object> modifiers,
         Type contractType)
     {
-        var jsonString = JsonSerializer.Serialize(instance);
+        var jsonString = System.Text.Json.JsonSerializer.Serialize(instance);
 
         var jsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString) as JObject;
 
