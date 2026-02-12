@@ -4,11 +4,10 @@ on:
   pull_request:
 
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,7 +30,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.1.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Build
         run: dotnet build KafkaRestProducer.sln -c Release

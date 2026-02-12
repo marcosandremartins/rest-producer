@@ -34,7 +34,7 @@ services:
       - ./contracts:/app/contracts
 ```
 
-Running image with .net6 sdk off a composer
+Running image with .NET 10 SDK off a composer
 
 ```yaml
 version: '3.4'
