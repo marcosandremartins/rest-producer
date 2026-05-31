@@ -8,17 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Apache.Avro" Version="1.12.0" />
+        <PackageReference Include="Apache.Avro" Version="1.13.0" />
         <PackageReference Include="AutoFixture" Version="4.18.1" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
-        <PackageReference Include="KafkaFlow" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.Compressor.Gzip" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.Serializer.NewtonsoftJson" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.Serializer.ProtobufNet" Version="3.0.10" />
-        <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentAvro" Version="3.0.10" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+        <PackageReference Include="KafkaFlow" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.Compressor.Gzip" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.LogHandler.Console" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.Serializer.NewtonsoftJson" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.Serializer.ProtobufNet" Version="3.2.0" />
+        <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentAvro" Version="3.2.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.4.0" />
     </ItemGroup>
 
     <ItemGroup>
